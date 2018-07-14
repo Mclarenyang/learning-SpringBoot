@@ -8,17 +8,31 @@ const FormItem = Form.Item;
 
 export default class SchoolSearchForm extends React.Component{
 
+  componentDidMount(){
+      this.props.onRef(this)
+  }
+
+  state = {
+    values:{chara:"",
+            cityName:"",
+            pageSize:0,
+            schoolId:0,
+            schoolName:"",
+            scoreline:0}
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        this.netRequest(values)
+        this.setState({values:values});
+        this.netRequest(values,0);
       }
     });
   }
 
-  netRequest = values => {
+  netRequest = (values,pageNum) => {
 
         var that = this;
         var targetUrl = "http://192.168.0.133:8080/findSchool";
@@ -33,7 +47,7 @@ export default class SchoolSearchForm extends React.Component{
                                       ["chara",values.chara],
                                       ["scoreline",values.scoreline],
                                       ["pageSize",values.pageSize],
-                                      ["pageNum",0]]),
+                                      ["pageNum",pageNum]]),
         },
         ).then(function(response){
             return response.json().then(function(data){
@@ -48,15 +62,11 @@ export default class SchoolSearchForm extends React.Component{
     }
 
 
-    //构造一个解析函数 然后子组件->父亲组件->子组件传递
-
-
-
 	render(){
     const { getFieldDecorator } = this.props.form;
 		return(
 
-		<Form onSubmit={this.handleSubmit} className="login-form">
+		<Form onSubmit={this.handleSubmit} className="login-form" >
         <FormItem>
         {getFieldDecorator('schoolId',{
             rules: [{ required: false }],

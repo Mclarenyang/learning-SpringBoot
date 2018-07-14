@@ -19,21 +19,29 @@ const SubMenu = Menu.SubMenu;
 const AddSchForm = Form.create()(SchoolAddForm);
 const SearchSchForm = Form.create()(SchoolSearchForm);
 
-function PageManage() { 
-
-    this.totalItem = "";   
-    this.nowPage = "";
-  
-};
-
 class SiderDemo extends React.Component {
+
+
   state = {
-    data: []
+    data: [],
+    pageSize: 1,
+    total:0,
+    nowPage:0
+  }
+
+  onRef = (ref) => {
+      this.child = ref
+  }
+
+  useFormValueToRQ = pageNum =>{
+    console.log('page;',pageNum);
+    //this.setState({nowPage: pageNum});
+    this.child.netRequest(this.child.state.values, pageNum);
+
   }
 
   pushData2P = data => {
-    //console.log('父组件得到的值：',data);
-    //this.setState({data: data});
+
     var dataArray = new Array();
     for (var i = 0; i < data.numberOfElements; i++) {
 
@@ -41,16 +49,20 @@ class SiderDemo extends React.Component {
       let schoolName = data.content[i].schoolName;
       let cityId = data.content[i].city.cityId;
       let cityName = data.content[i].city.cityName;
+
       let chara = "暂无数据";
       if (data.content[i].city.chara != ""){
         chara = data.content[i].city.chara; 
       }
+
       let scoreline = data.content[i].scoreline;
 
       dataArray.push({schoolId,schoolName,cityId,cityName,chara,scoreline});
     }
     console.log('dataArray', dataArray);
     this.setState({data: dataArray});
+    this.setState({total: data.totalElements});
+    this.setState({pageSize: data.size});
   }
 
 
@@ -60,13 +72,13 @@ class SiderDemo extends React.Component {
         <Content style={{ margin: '20px 16px', maxHeight: 900}}>
           <div style={{ padding: 24, background: '#fff', minHeight: 700}}>
             <AddSchForm />
-            <SearchSchForm pushData2P = {data => this.pushData2P(data)}/>
+            <SearchSchForm pushData2P = {data => this.pushData2P(data)} onRef={this.onRef}/>
             <SchoolTable style={{
               position: 'relative',
               left: 400,
               top: -690,
               maxWidth: 850
-            }}  data={this.state.data} />
+            }}  data={this.state.data} total={this.state.total} pageSize={this.state.pageSize} useFormValueToRQ = {pageNum => this.useFormValueToRQ(pageNum)} />
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>

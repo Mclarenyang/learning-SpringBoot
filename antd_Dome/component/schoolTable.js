@@ -29,9 +29,15 @@ export default class SchoolTable extends React.Component{
     lineData: ''
   };
 
-  componentDidUpdate(prevProps, prevState){
-        console.log(this.props.data);
-        //console.log('什么玩意？:',this.props.data.content);
+  // componentDidUpdate(prevProps, prevState){
+  //       this.setState(currentPage: this.props.current)
+  //       //console.log('什么玩意？:',this.props.data.content);
+  // }
+
+  onChange = (page) => {
+    //this.setState({current: page});
+    var that = this;
+    that.props.useFormValueToRQ(page-1);
   }
   
 
@@ -39,7 +45,7 @@ export default class SchoolTable extends React.Component{
 	render(){
 		return(
 			<div {...this.props}>
-				<Table dataSource={this.props.data} > 
+				<Table dataSource={this.props.data} pagination={{ pageSize:this.props.pageSize, total:this.props.total, onChange:this.onChange }}> 
           <Column
             title="ID"
             dataIndex="schoolId"
