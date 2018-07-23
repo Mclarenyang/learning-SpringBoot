@@ -19,7 +19,7 @@ export default class SchoolAddForm extends React.Component{
 
   netRequest(values){
 
-        var targetUrl = "http://192.168.0.133:8080/addSchool";
+        var targetUrl = "http://192.168.0.144:8080/addSchool";
         fetch(targetUrl,{
             method: 'POST',
             headers: new Headers({
@@ -40,11 +40,11 @@ export default class SchoolAddForm extends React.Component{
     }
 
 
-	render(){
-		const { getFieldDecorator } = this.props.form;
-		return(
+  render(){
+    const { getFieldDecorator } = this.props.form;
+    return(
 
-		<Form onSubmit={this.handleSubmit} className="login-form">
+    <Form onSubmit={this.handleSubmit} className="handle-form">
         <FormItem>
           {getFieldDecorator('schoolName', {
             rules: [{ required: true, message: 'Please input a SchoolName!' }],
@@ -67,12 +67,12 @@ export default class SchoolAddForm extends React.Component{
           )}
         </FormItem>
         <FormItem>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button type="primary" htmlType="submit" className="handle-form-button">
             Add
           </Button>
         </FormItem>
       </Form>
 
-		);
-	}
+    );
+  }
 }

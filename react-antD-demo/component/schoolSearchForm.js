@@ -35,11 +35,11 @@ export default class SchoolSearchForm extends React.Component{
   netRequest = (values,pageNum) => {
 
         var that = this;
-        var targetUrl = "http://192.168.0.133:8080/findSchool";
+        var targetUrl = "http://192.168.0.144:8080/findSchool";
         fetch(targetUrl,{
             method: 'POST',
             headers: new Headers({
-           'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+           'Content-Type': 'application/x-www-form-urlencoded'
         }),
            body: new URLSearchParams([["schoolId",values.schoolId],
                                       ["schoolName",values.schoolName],
@@ -51,22 +51,19 @@ export default class SchoolSearchForm extends React.Component{
         },
         ).then(function(response){
             return response.json().then(function(data){
-              console.log('datacontent',data.content);
               if (data.numberOfElements == 0) {
                  alert("没有相关数据🤪🙃🤔");
               }
               that.props.pushData2P(data);
-              //this.setState({data: data});
             });
         })
     }
-
 
 	render(){
     const { getFieldDecorator } = this.props.form;
 		return(
 
-		<Form onSubmit={this.handleSubmit} className="login-form" >
+		<Form onSubmit={this.handleSubmit} className="handle-form" >
         <FormItem>
         {getFieldDecorator('schoolId',{
             rules: [{ required: false }],
@@ -110,7 +107,7 @@ export default class SchoolSearchForm extends React.Component{
           )}
         </FormItem>
         <FormItem>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button type="primary" htmlType="submit" className="handle-form-button">
             Search
           </Button>
         </FormItem>
